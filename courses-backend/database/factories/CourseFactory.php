@@ -25,9 +25,9 @@ class CourseFactory extends Factory
             'start_date' => fake()->dateTimeBetween('-1 year', 'now'),
             'course_length_in_days' => fake()->numberBetween(0, 365),
             'end_date' => function (array $attributes) {
-                $startDate = Carbon::createFromTimeStamp($attributes['start_date']->getTimestamp());
-                $startDate->addDays($attributes['course_length_in_days']);
-                return $startDate;
+                $endDate = Carbon::createFromTimeStamp($attributes['start_date']->getTimestamp());
+                $endDate->addDays($attributes['course_length_in_days']);
+                return $endDate;
             },
             'primary_coordinator_id' => fake()->numberBetween(1, 10)
         ];

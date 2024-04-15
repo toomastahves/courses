@@ -15,7 +15,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return CourseResource::collection(Course::with('primaryCoordinator', 'coordinators')->get());
+        return CourseResource::collection(Course::with('primaryCoordinator')->get());
     }
 
     /**
@@ -23,14 +23,18 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $course = Course::create([...$request->validate([
-            'name' => 'required|max:200',
-            'description' => 'nullable|string|max:2000',
-            'study_load' => 'required|min:0|max:30',
-            'level' => 'required|in:bachelor,master,doctoral',
-            'start_date' => 'required|date|after:today',
-            'course_length_in_days' => 'required|min:0|max:365'
-        ]), 'primary_coordinator_id' => 1, 'end_date' => new Carbon()]);
+        $course = Course::create([
+            ...$request->validate([
+                'name' => 'required|max:200',
+                'description' => 'nullable|string|max:2000',
+                'study_load' => 'required|min:0|max:30',
+                'level' => 'required|in:bachelor,master,doctoral',
+                'start_date' => 'required|date|after:today',
+                'course_length_in_days' => 'required|min:0|max:365',
+                'primary_coordinator_id' => 'required|numeric'
+            ]),
+            'end_date' => $this->createEndDate($request)
+        ]);
 
         return new CourseResource($course);
     }
@@ -40,7 +44,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $course->load('primaryCoordinator', 'coordinators');
+        $course->load('primaryCoordinator', 'coordinators', 'coordinators.user');
         return new CourseResource($course);
     }
 
@@ -49,14 +53,17 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $course->update($request->validate([
-            'name' => 'sometimes|max:200',
-            'description' => 'nullable|string|max:2000',
-            'study_load' => 'sometimes|min:0|max:30',
-            'level' => 'sometimes|in:bachelor,master,doctoral',
-            'start_date' => 'sometimes|date|after:today',
-            'course_length_in_days' => 'sometimes|min:0|max:365'
-        ]));
+        $course->update([
+            ...$request->validate([
+                'name' => 'sometimes|max:200',
+                'description' => 'nullable|string|max:2000',
+                'study_load' => 'sometimes|min:0|max:30',
+                'level' => 'sometimes|in:bachelor,master,doctoral',
+                'start_date' => 'sometimes|date|after:today',
+                'course_length_in_days' => 'sometimes|min:0|max:365'
+            ]),
+            'end_date' => $this->createEndDate($request)
+        ]);
 
         return new CourseResource($course);
     }
@@ -68,5 +75,16 @@ class CourseController extends Controller
     {
         $course->delete();
         return response(status: 204);
+    }
+
+    /**
+     * Generates end date using start date and length of course in days
+     * end_date = start_date + course_length_in_days
+     */
+    private function createEndDate($request)
+    {
+        $endDate = Carbon::createFromDate($request['start_date']);
+        $endDate->addDays($request['course_length_in_days']);
+        return $endDate->format('Y-m-d');
     }
 }
