@@ -86,7 +86,7 @@ export default function CourseListComponent() {
                 <TableCell align="left">{course.level}</TableCell>
                 <TableCell align="left">{course.study_load}</TableCell>
                 <TableCell align="left">
-                  {course.primary_coordinator.name}
+                  {course?.primary_coordinator?.name}
                 </TableCell>
               </TableRow>
             ))}
