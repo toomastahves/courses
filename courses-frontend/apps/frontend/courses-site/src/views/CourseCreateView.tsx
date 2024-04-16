@@ -1,5 +1,7 @@
+import CourseAddComponent from "../components/course-add/course-add.component";
+
 export function CourseCreateView() {
-  return <div>Course create view</div>;
+  return <CourseAddComponent />;
 }
 
 export default CourseCreateView;

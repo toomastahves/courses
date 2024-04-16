@@ -28,7 +28,7 @@ class CourseController extends Controller
                 'name' => 'required|max:200',
                 'description' => 'nullable|string|max:2000',
                 'study_load' => 'required|min:0|max:30',
-                'level' => 'required|in:bachelor,master,doctoral',
+                'level' => 'required|in:Bachelor,Master,Doctoral',
                 'start_date' => 'required|date|after:today',
                 'course_length_in_days' => 'required|min:0|max:365',
                 'primary_coordinator_id' => 'required|numeric'
@@ -58,7 +58,7 @@ class CourseController extends Controller
                 'name' => 'sometimes|max:200',
                 'description' => 'nullable|string|max:2000',
                 'study_load' => 'sometimes|min:0|max:30',
-                'level' => 'sometimes|in:bachelor,master,doctoral',
+                'level' => 'sometimes|in:Bachelor,Master,Doctoral',
                 'start_date' => 'sometimes|date|after:today',
                 'course_length_in_days' => 'sometimes|min:0|max:365'
             ]),
