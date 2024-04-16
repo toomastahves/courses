@@ -1,0 +1,38 @@
+.menu-item-sup-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #212121;
+}
+
+.menu-item-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.menu-items-icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.menu-items-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-items-active {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: white;
+  width: 1px;
+}
