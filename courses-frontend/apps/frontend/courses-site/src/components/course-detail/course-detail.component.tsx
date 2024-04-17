@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../store/store';
 import SpinnerComponent from '../spinner/spinner.component';
-import { fetchCourseById, fetchCourses, updateCourse } from '../../store/coursesReducer';
+import { deleteCourse, fetchCourseById, updateCourse } from '../../store/coursesReducer';
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { Course } from '../../interfaces/Course';
 import {
@@ -59,6 +59,7 @@ export function CourseDetailComponent() {
   const [localCourseDetails, setLocalCourseDetails] = useState<Course | null | undefined>(null);
 
   useEffect(() => {
+    if (!usersState.users) dispatch(fetchUsers());
     if (!localCourseDetails && id) dispatch(fetchCourseById(id));
     setLocalCourseDetails(courseDetails);
     setCourseName(courseDetails?.name ?? '');
@@ -68,13 +69,16 @@ export function CourseDetailComponent() {
     setStartDate(dayjs(courseDetails?.start_date));
     setDurationInDays(String(courseDetails?.course_length_in_days));
     setPrimaryCoordinator(String(courseDetails?.primary_coordinator?.id ?? ''));
-  }, [dispatch, id, courseDetails, localCourseDetails]);
+  }, [dispatch, id, courseDetails, localCourseDetails, usersState.users]);
 
   if (isLoading || usersState.isLoading) {
     return <SpinnerComponent open={true} />;
   }
 
-  if (!usersState.users) dispatch(fetchUsers());
+  const handleDelete = async () => {
+    await dispatch(deleteCourse(Number(id)));
+    navigate('/courses');
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -134,7 +138,6 @@ export function CourseDetailComponent() {
           primary_coordinator_id: Number(primaryCoordinator)
         })
       );
-      await dispatch(fetchCourses());
       navigate('/courses');
     }
   };
@@ -164,7 +167,6 @@ export function CourseDetailComponent() {
           </div>
           <div style={{ padding: '10px' }}>
             <TextField
-              required
               fullWidth
               id="description"
               label="Description"
@@ -261,6 +263,11 @@ export function CourseDetailComponent() {
           <div style={{ padding: '10px' }}>
             <Button sx={{ width: '100%' }} variant="contained" type="submit">
               Update
+            </Button>
+          </div>
+          <div style={{ padding: '10px' }}>
+            <Button sx={{ width: '100%' }} variant="outlined" color="error" onClick={handleDelete}>
+              Delete
             </Button>
           </div>
         </div>

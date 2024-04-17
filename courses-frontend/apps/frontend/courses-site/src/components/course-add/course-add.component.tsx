@@ -1,7 +1,7 @@
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { createCourse, fetchCourses } from '../../store/coursesReducer';
+import { createCourse } from '../../store/coursesReducer';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { fetchUsers } from '../../store/usersReducer';
@@ -29,9 +29,7 @@ export function CourseAddComponent() {
   const dispatch: AppDispatch = useDispatch();
 
   const { users, isLoading } = useSelector((state: RootState) => state.users);
-  const isCoursesLoading = useSelector(
-    (state: RootState) => state.courses.isLoading
-  );
+  const isCoursesLoading = useSelector((state: RootState) => state.courses.isLoading);
 
   const [courseName, setCourseName] = useState('');
   const [courseNameError, setCourseNameError] = useState(false);
@@ -50,13 +48,11 @@ export function CourseAddComponent() {
 
   const [durationInDays, setDurationInDays] = useState('');
   const [durationInDaysError, setDurationInDaysError] = useState(false);
-  const [durationInDaysHelperText, setDurationInDaysErrorHelperText] =
-    useState('');
+  const [durationInDaysHelperText, setDurationInDaysErrorHelperText] = useState('');
 
   const [primaryCoordinator, setPrimaryCoordinator] = useState('');
   const [primaryCoordinatorError, setPrimaryCoordinatorError] = useState(false);
-  const [primaryCoordinatorHelperText, setPrimaryCoordinatorHelperText] =
-    useState('');
+  const [primaryCoordinatorHelperText, setPrimaryCoordinatorHelperText] = useState('');
 
   if (isLoading || isCoursesLoading) {
     return <SpinnerComponent open={true} />;
@@ -121,7 +117,6 @@ export function CourseAddComponent() {
           primary_coordinator_id: Number(primaryCoordinator)
         })
       );
-      await dispatch(fetchCourses());
       navigate('/courses');
     }
   };
@@ -144,15 +139,12 @@ export function CourseAddComponent() {
               name="courseName"
               autoComplete="course-name"
               error={courseNameError}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setCourseName(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCourseName(e.target.value)}
               helperText={courseNameHelperText}
             />
           </div>
           <div style={{ padding: '10px' }}>
             <TextField
-              required
               fullWidth
               id="description"
               label="Description"
@@ -162,9 +154,7 @@ export function CourseAddComponent() {
               maxRows={5}
               minRows={5}
               error={descriptionError}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setDecription(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDecription(e.target.value)}
               helperText={descriptionHelperText}
             />
           </div>
@@ -178,9 +168,7 @@ export function CourseAddComponent() {
               name="studyLoad"
               autoComplete="studyLoad"
               error={studyLoadError}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setStudyLoad(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStudyLoad(e.target.value)}
               helperText={studyLoadHelperText}
             />
           </div>
@@ -193,9 +181,7 @@ export function CourseAddComponent() {
               select
               label="Study Level"
               value={studyLevel}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setStudyLevel(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStudyLevel(e.target.value)}
             >
               {StudyLevelList.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -225,9 +211,7 @@ export function CourseAddComponent() {
               name="durationInDays"
               autoComplete="durationInDays"
               error={durationInDaysError}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setDurationInDays(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDurationInDays(e.target.value)}
               helperText={durationInDaysHelperText}
             />
           </div>
@@ -242,9 +226,7 @@ export function CourseAddComponent() {
               error={primaryCoordinatorError}
               value={primaryCoordinator}
               helperText={primaryCoordinatorHelperText}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPrimaryCoordinator(e.target.value)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrimaryCoordinator(e.target.value)}
             >
               {users?.map((user: User) => (
                 <MenuItem key={user.id} value={user.id}>

@@ -48,7 +48,7 @@ export const updateCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
   'courses/deleteCourse',
-  async (id: string) => {
+  async (id: string | number) => {
     const response = await ApiService.deleteCourse(id);
     return response?.data;
   }
@@ -67,8 +67,8 @@ const coursesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(createCourse.fulfilled, (state, action) => {
-        if (!state.courses) state.courses = [action.payload];
-        else state.courses.push(action.payload);
+        if (!state.courses) state.courses = [action.payload.data];
+        else state.courses.push(action.payload.data);
         state.isLoading = false;
       })
       .addCase(fetchCourseById.pending, (state, action) => {
@@ -99,9 +99,6 @@ const coursesSlice = createSlice({
       })
       .addCase(deleteCourse.fulfilled, (state, action) => {
         state.isLoading = false;
-        const id = action.payload.id;
-        const courses = state.courses;
-        state.courses = courses?.filter((item: Course) => item.id !== id);
       })
       .addCase(updateCourse.pending, (state, action) => {
         state.isLoading = true;
@@ -111,12 +108,6 @@ const coursesSlice = createSlice({
       })
       .addCase(updateCourse.fulfilled, (state, action) => {
         state.isLoading = false;
-        const updatedCourse = action.payload;
-        const id = updatedCourse.id;
-        state.courses = state.courses?.map((item: Course) =>
-          item.id === id ? updatedCourse : item
-        );
-        state.courseDetails = updatedCourse;
       });
   }
 });

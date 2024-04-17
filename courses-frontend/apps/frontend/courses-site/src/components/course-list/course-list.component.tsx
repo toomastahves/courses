@@ -1,19 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography
-} from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { fetchCourses } from '../../store/coursesReducer';
 import SpinnerComponent from '../spinner/spinner.component';
 import { Course } from '../../interfaces/Course';
 import { AppDispatch, RootState } from '../../store/store';
+import { useEffect } from 'react';
 import './course-list.component.styles.scss';
 
 export default function CourseListComponent() {
@@ -21,7 +13,9 @@ export default function CourseListComponent() {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
-  if (!courses) dispatch(fetchCourses());
+  useEffect(() => {
+    if (!courses) dispatch(fetchCourses());
+  }, [courses, dispatch]);
 
   if (isLoading) {
     return <SpinnerComponent open={isLoading} />;
@@ -82,14 +76,10 @@ export default function CourseListComponent() {
                     year: '2-digit'
                   })}
                 </TableCell>
-                <TableCell align="left">
-                  {course.course_length_in_days}
-                </TableCell>
+                <TableCell align="left">{course.course_length_in_days}</TableCell>
                 <TableCell align="left">{course.level}</TableCell>
                 <TableCell align="left">{course.study_load}</TableCell>
-                <TableCell align="left">
-                  {course?.primary_coordinator?.name}
-                </TableCell>
+                <TableCell align="left">{course?.primary_coordinator?.name}</TableCell>
               </TableRow>
             ))}
           </TableBody>

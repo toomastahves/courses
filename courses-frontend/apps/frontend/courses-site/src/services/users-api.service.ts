@@ -7,7 +7,7 @@ export const ApiService = {
       return await client.get(`${environment.NX_REST_API}/api/v1/users`, {
         headers: { Accept: 'application/json' }
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.log(err);
     }
   }
