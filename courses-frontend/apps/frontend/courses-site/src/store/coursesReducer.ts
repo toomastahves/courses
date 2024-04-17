@@ -1,11 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiService } from '../services/courses-api.service';
+import { Course } from '../interfaces/Course';
 
-const initialState = {
+export interface CourseState {
+  courses: Course[] | null | undefined;
+  courseDetails: Course | null | undefined;
+  isLoading: boolean;
+}
+
+const initialState: CourseState = {
   courses: null,
   courseDetails: null,
   isLoading: false
-} as any;
+};
 
 export const fetchCourses = createAsyncThunk(
   'courses/fetchCourses',
@@ -25,7 +32,7 @@ export const fetchCourseById = createAsyncThunk(
 
 export const createCourse = createAsyncThunk(
   'courses/createCourse',
-  async (courseDto: any) => {
+  async (courseDto: Course) => {
     const response = await ApiService.createCourse(courseDto);
     return response?.data;
   }
@@ -33,7 +40,7 @@ export const createCourse = createAsyncThunk(
 
 export const updateCourse = createAsyncThunk(
   'courses/updateCourse',
-  async (courseDto: any) => {
+  async (courseDto: Course) => {
     const response = await ApiService.updateCourse(courseDto);
     return response?.data;
   }
@@ -94,7 +101,7 @@ const coursesSlice = createSlice({
         state.isLoading = false;
         const id = action.payload.id;
         const courses = state.courses;
-        state.courses = courses.filter((item: any) => item.id !== id);
+        state.courses = courses?.filter((item: Course) => item.id !== id);
       })
       .addCase(updateCourse.pending, (state, action) => {
         state.isLoading = true;
@@ -106,7 +113,7 @@ const coursesSlice = createSlice({
         state.isLoading = false;
         const updatedCourse = action.payload;
         const id = updatedCourse.id;
-        state.sensors = state.sensors.map((item: any) =>
+        state.courses = state.courses?.map((item: Course) =>
           item.id === id ? updatedCourse : item
         );
         state.courseDetails = updatedCourse;

@@ -12,11 +12,13 @@ import {
 } from '@mui/material';
 import { fetchCourses } from '../../store/coursesReducer';
 import SpinnerComponent from '../spinner/spinner.component';
+import { Course } from '../../interfaces/Course';
+import { AppDispatch, RootState } from '../../store/store';
 import './course-list.component.styles.scss';
 
 export default function CourseListComponent() {
-  const { courses, isLoading } = useSelector((state: any) => state.courses);
-  const dispatch: any = useDispatch();
+  const { courses, isLoading } = useSelector((state: RootState) => state.courses);
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   if (!courses) dispatch(fetchCourses());
@@ -55,10 +57,10 @@ export default function CourseListComponent() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {courses?.map((course: any) => (
+            {courses?.map((course: Course) => (
               <TableRow
                 hover={true}
-                onClick={() => handleRowClick(course.id)}
+                onClick={() => handleRowClick(String(course.id))}
                 key={course.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
@@ -73,7 +75,7 @@ export default function CourseListComponent() {
                   })}
                 </TableCell>
                 <TableCell align="left">
-                  {new Date(course.end_date).toLocaleString('et-EE', {
+                  {new Date(String(course.end_date)).toLocaleString('et-EE', {
                     timeZone: 'Europe/Tallinn',
                     day: '2-digit',
                     month: '2-digit',

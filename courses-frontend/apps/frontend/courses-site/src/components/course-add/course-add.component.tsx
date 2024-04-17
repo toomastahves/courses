@@ -4,31 +4,19 @@ import { useState } from 'react';
 import { createCourse } from '../../store/coursesReducer';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
-import './course-add.component.styles.scss';
 import { fetchUsers } from '../../store/usersReducer';
 import { useNavigate } from 'react-router-dom';
 import SpinnerComponent from '../spinner/spinner.component';
-
-const studyLevelList = [
-  {
-    value: 'Bachelor',
-    label: 'Bachelor'
-  },
-  {
-    value: 'Master',
-    label: 'Master'
-  },
-  {
-    value: 'Doctoral',
-    label: 'Doctoral'
-  }
-];
+import { StudyLevelList } from '../../const/StudyLevelList';
+import { User } from '../../interfaces/User';
+import { AppDispatch, RootState } from '../../store/store';
+import './course-add.component.styles.scss';
 
 export function CourseAddComponent() {
   const navigate = useNavigate();
-  const dispatch: any = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
-  const { users, isLoading } = useSelector((state: any) => state.users);
+  const { users, isLoading } = useSelector((state: RootState) => state.users);
 
   const [courseName, setCourseName] = useState('');
   const [courseNameError, setCourseNameError] = useState(false);
@@ -124,7 +112,7 @@ export function CourseAddComponent() {
           level: studyLevel,
           start_date: dayjs(startDate).format('YYYY-MM-DD'),
           course_length_in_days: Number(durationInDays),
-          primary_coordinator_id: primaryCoordinator
+          primary_coordinator_id: Number(primaryCoordinator)
         })
       );
       navigate('/courses');
@@ -202,7 +190,7 @@ export function CourseAddComponent() {
                 setStudyLevel(e.target.value)
               }
             >
-              {studyLevelList.map((option) => (
+              {StudyLevelList.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
@@ -251,7 +239,7 @@ export function CourseAddComponent() {
                 setPrimaryCoordinator(e.target.value)
               }
             >
-              {users?.map((user: any) => (
+              {users?.map((user: User) => (
                 <MenuItem key={user.id} value={user.id}>
                   {user.name}
                 </MenuItem>

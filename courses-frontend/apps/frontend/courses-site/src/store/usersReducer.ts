@@ -1,10 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiService } from '../services/users-api.service';
+import { User } from '../interfaces/User';
 
-const initialState = {
+export interface UserState {
+  users: User[] | null;
+  isLoading: boolean;
+}
+
+const initialState: UserState = {
   users: null,
   isLoading: false
-} as any;
+};
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
   const response = await ApiService.getUserList();
