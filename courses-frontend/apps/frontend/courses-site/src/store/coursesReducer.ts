@@ -26,7 +26,7 @@ export const fetchCourseById = createAsyncThunk(
   'courses/fetchCourseById',
   async (id: string) => {
     const response = await ApiService.getCourseDetails(id);
-    return response?.data;
+    return response?.data?.data;
   }
 );
 
@@ -40,7 +40,7 @@ export const createCourse = createAsyncThunk(
 
 export const updateCourse = createAsyncThunk(
   'courses/updateCourse',
-  async (courseDto: Course) => {
+  async (courseDto: any) => {
     const response = await ApiService.updateCourse(courseDto);
     return response?.data;
   }

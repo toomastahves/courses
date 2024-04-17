@@ -1,5 +1,7 @@
+import CourseDetailComponent from '../components/course-detail/course-detail.component';
+
 export function CourseDetailView() {
-  return <div>Course detail view</div>;
+  return <CourseDetailComponent />;
 }
 
 export default CourseDetailView;

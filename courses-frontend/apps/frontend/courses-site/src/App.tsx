@@ -15,7 +15,7 @@ const App = () => {
           <Route index element={<CourseListView />} />
           <Route path="courses" element={<CourseListView />} />
           <Route path="courses/add" element={<CourseCreateView />} />
-          <Route path="courses/details/:uuid" element={<CourseDetailView />} />
+          <Route path="courses/details/:id" element={<CourseDetailView />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

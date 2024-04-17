@@ -60,7 +60,8 @@ class CourseController extends Controller
                 'study_load' => 'sometimes|min:0|max:30',
                 'level' => 'sometimes|in:Bachelor,Master,Doctoral',
                 'start_date' => 'sometimes|date|after:yesterday',
-                'course_length_in_days' => 'sometimes|min:0|max:365'
+                'course_length_in_days' => 'sometimes|min:0|max:365',
+                'primary_coordinator_id' => 'required|numeric'
             ]),
             'end_date' => $this->createEndDate($request)
         ]);

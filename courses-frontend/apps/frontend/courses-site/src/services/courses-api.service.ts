@@ -14,7 +14,7 @@ export const ApiService = {
 
   async updateCourse(courseDto: any) {
     return await client.put(
-      `${environment.NX_REST_API}/api/v1/courses`,
+      `${environment.NX_REST_API}/api/v1/courses/${courseDto.id}`,
       courseDto,
       {
         headers: { Accept: 'application/json' }
