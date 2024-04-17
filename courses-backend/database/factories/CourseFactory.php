@@ -21,7 +21,7 @@ class CourseFactory extends Factory
             'name' => fake()->unique()->sentence(5, true),
             'description' => fake()->paragraph(2, true),
             'study_load' => fake()->numberBetween(0, 30),
-            'level' => fake()->randomElement(['bachelor', 'master', 'doctoral']),
+            'level' => fake()->randomElement(['Bachelor', 'Master', 'Doctoral']),
             'start_date' => fake()->dateTimeBetween('-1 year', 'now'),
             'course_length_in_days' => fake()->numberBetween(0, 365),
             'end_date' => function (array $attributes) {

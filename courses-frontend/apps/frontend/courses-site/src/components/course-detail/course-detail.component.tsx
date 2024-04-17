@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../store/store';
 import SpinnerComponent from '../spinner/spinner.component';
-import { deleteCourse, fetchCourseById, updateCourse } from '../../store/coursesReducer';
+import { deleteCourse, fetchCourseById, fetchCourses, updateCourse } from '../../store/coursesReducer';
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { Course } from '../../interfaces/Course';
 import {
@@ -77,6 +77,7 @@ export function CourseDetailComponent() {
 
   const handleDelete = async () => {
     await dispatch(deleteCourse(Number(id)));
+    await dispatch(fetchCourses());
     navigate('/courses');
   }
 
@@ -138,6 +139,7 @@ export function CourseDetailComponent() {
           primary_coordinator_id: Number(primaryCoordinator)
         })
       );
+      await dispatch(fetchCourses());
       navigate('/courses');
     }
   };

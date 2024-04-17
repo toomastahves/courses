@@ -21,8 +21,14 @@ export default function CourseListComponent() {
     return <SpinnerComponent open={isLoading} />;
   }
 
-  if (!courses) {
-    return 'No Courses';
+  if (courses?.length === 0) {
+    return (
+      <div className="courses-header">
+        <Typography variant="h6" component="div">
+          No courses
+        </Typography>
+      </div>
+    );
   }
 
   function handleRowClick(id: string) {
