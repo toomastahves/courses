@@ -1,7 +1,7 @@
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { createCourse } from '../../store/coursesReducer';
+import { createCourse, fetchCourses } from '../../store/coursesReducer';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { fetchUsers } from '../../store/usersReducer';
@@ -17,6 +17,7 @@ export function CourseAddComponent() {
   const dispatch: AppDispatch = useDispatch();
 
   const { users, isLoading } = useSelector((state: RootState) => state.users);
+  const isCoursesLoading = useSelector((state: RootState) => state.courses.isLoading);
 
   const [courseName, setCourseName] = useState('');
   const [courseNameError, setCourseNameError] = useState(false);
@@ -43,8 +44,36 @@ export function CourseAddComponent() {
   const [primaryCoordinatorHelperText, setPrimaryCoordinatorHelperText] =
     useState('');
 
-  if (isLoading) {
-    return <SpinnerComponent open={isLoading} />;
+  const isCourseNameValid = () => {
+    return (
+      courseName !== '' && courseName.length > 0 && courseName.length <= 200
+    );
+  };
+
+  const isDescriptionValid = () => {
+    return description.length <= 2000;
+  };
+
+  const isStudyLoadValid = () => {
+    return (
+      studyLoad !== '' && Number(studyLoad) >= 0 && Number(studyLoad) <= 30
+    );
+  };
+
+  const isDurationInDaysValid = () => {
+    return (
+      durationInDays !== '' &&
+      Number(durationInDays) > 0 &&
+      Number(durationInDays) <= 365
+    );
+  };
+
+  const isPrimaryCoordinatorValid = () => {
+    return primaryCoordinator !== '';
+  };
+
+  if (isLoading || isCoursesLoading) {
+    return <SpinnerComponent open={true} />;
   }
 
   if (!users) dispatch(fetchUsers());
@@ -54,7 +83,7 @@ export function CourseAddComponent() {
 
     setCourseNameError(false);
     setCourseNameHelperText('');
-    if (courseName === '' || courseName.length > 200) {
+    if (!isCourseNameValid()) {
       setCourseNameError(true);
       setCourseNameHelperText(
         'Course name is mandatory, has to be shorter than 200 chars'
@@ -63,14 +92,14 @@ export function CourseAddComponent() {
 
     setDescriptionError(false);
     setDescriptionHelperText('');
-    if (description.length > 2000) {
+    if (!isDescriptionValid()) {
       setDescriptionError(true);
       setDescriptionHelperText('Description has to be shorter than 2000 chars');
     }
 
     setStudyLoadError(false);
     setStudyLoadHelperText('');
-    if (studyLoad === '' || Number(studyLoad) < 0 || Number(studyLoad) > 30) {
+    if (!isStudyLoadValid()) {
       setStudyLoadError(true);
       setStudyLoadHelperText(
         'Study load is mandatory, must be between 0 and 30'
@@ -79,11 +108,7 @@ export function CourseAddComponent() {
 
     setDurationInDaysError(false);
     setDurationInDaysErrorHelperText('');
-    if (
-      durationInDays === '' ||
-      Number(durationInDays) < 1 ||
-      Number(durationInDays) > 265
-    ) {
+    if (!isDurationInDaysValid()) {
       setDurationInDaysError(true);
       setDurationInDaysErrorHelperText(
         'Duration is mandatory, must be between 0 and 365'
@@ -92,18 +117,19 @@ export function CourseAddComponent() {
 
     setPrimaryCoordinatorError(false);
     setPrimaryCoordinatorHelperText('');
-    if (primaryCoordinator === '') {
+    if (!isPrimaryCoordinatorValid()) {
       setPrimaryCoordinatorError(true);
       setPrimaryCoordinatorHelperText('Primary coordinator must be selected');
     }
 
-    if (
-      !courseNameError &&
-      !descriptionError &&
-      !studyLoadError &&
-      !durationInDaysError &&
-      !primaryCoordinatorError
-    ) {
+    const isFormValid =
+      isCourseNameValid() &&
+      isDescriptionValid() &&
+      isStudyLoadValid() &&
+      isDurationInDaysValid();
+      isPrimaryCoordinatorValid();
+
+    if (isFormValid) {
       await dispatch(
         createCourse({
           name: courseName,
@@ -115,6 +141,7 @@ export function CourseAddComponent() {
           primary_coordinator_id: Number(primaryCoordinator)
         })
       );
+      await dispatch(fetchCourses());
       navigate('/courses');
     }
   };
