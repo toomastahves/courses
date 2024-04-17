@@ -11,7 +11,14 @@ use Illuminate\Http\Request;
 class CourseController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/v1/courses/",
+     *     summary="Get list of courses",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     )
+     * )
      */
     public function index()
     {
@@ -19,7 +26,44 @@ class CourseController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/v1/courses/{id}",
+     *     summary="Creates a course",
+     * @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="id",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="name",
+     *                     type="string"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     oneOf={
+     *                     	   @OA\Schema(type="string")
+     *                     }
+     *                 ),
+     *                 example={"id": "123", "name": "Math", "description": "Good course"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         description="Course ID",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="1", summary="An int value.")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="OK"
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -40,7 +84,22 @@ class CourseController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/v1/courses/{id}",
+     *     summary="Get course by ID",
+     *     @OA\Parameter(
+     *         description="Course ID",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="1", summary="An int value.")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     )
+     * )
      */
     public function show(Course $course)
     {
@@ -49,7 +108,22 @@ class CourseController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @OA\Put(
+     *     path="/api/v1/courses/{id}",
+     *     summary="Updates a course",
+     *     @OA\Parameter(
+     *         description="Course ID",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="1", summary="An int value.")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     )
+     * )
      */
     public function update(Request $request, Course $course)
     {
@@ -70,7 +144,22 @@ class CourseController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/v1/courses/{id}",
+     *     summary="Deletes a course",
+     *     @OA\Parameter(
+     *         description="Course ID",
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="string"),
+     *         @OA\Examples(example="int", value="1", summary="An int value.")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="OK"
+     *     )
+     * )
      */
     public function destroy(Course $course)
     {

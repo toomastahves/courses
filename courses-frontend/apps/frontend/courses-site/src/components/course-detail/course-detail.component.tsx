@@ -67,7 +67,7 @@ export function CourseDetailComponent() {
     setStudyLoad(String(courseDetails?.study_load));
     setStartDate(dayjs(courseDetails?.start_date));
     setDurationInDays(String(courseDetails?.course_length_in_days));
-    setPrimaryCoordinator(String(courseDetails?.primary_coordinator?.id));
+    setPrimaryCoordinator(String(courseDetails?.primary_coordinator?.id ?? ''));
   }, [dispatch, id, courseDetails, localCourseDetails]);
 
   if (isLoading || usersState.isLoading) {
