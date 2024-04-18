@@ -38,7 +38,7 @@ export default function CourseListComponent() {
   return (
     <div>
       <div className="courses-header">
-        <Typography variant="h6" component="div">
+        <Typography gutterBottom variant="h5" component="div">
           Courses
         </Typography>
       </div>

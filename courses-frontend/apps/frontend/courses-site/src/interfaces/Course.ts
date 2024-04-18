@@ -1,3 +1,4 @@
+import { Coordinator } from "./Coordinator";
 import { User } from "./User";
 
 export interface Course {
@@ -11,4 +12,5 @@ export interface Course {
     end_date?: string;
     primary_coordinator_id: string;
     primary_coordinator?: User;
+    coordinators?: Coordinator[]
 }

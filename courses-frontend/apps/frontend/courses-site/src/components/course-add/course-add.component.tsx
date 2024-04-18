@@ -1,6 +1,6 @@
-import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { createCourse, fetchCourses } from '../../store/coursesReducer';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
@@ -23,6 +23,7 @@ import {
   isPrimaryCoordinatorValid,
   isStudyLoadValid
 } from '../../validators/course.validators';
+import { createCoordinator } from '../../store/coordinatorReducer';
 
 export function CourseAddComponent() {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ export function CourseAddComponent() {
   const [primaryCoordinatorError, setPrimaryCoordinatorError] = useState(false);
   const [primaryCoordinatorHelperText, setPrimaryCoordinatorHelperText] = useState('');
 
+  const [secondaryCoordinators, setSecondaryCoordinators] = useState<User[]>([]);
+
   useEffect(() => {
     if (!users) dispatch(fetchUsers());
   }, [dispatch, users]);
@@ -61,6 +64,10 @@ export function CourseAddComponent() {
   if (isLoading || isCoursesLoading) {
     return <SpinnerComponent open={true} />;
   }
+
+  const handleSecondaryCoordinatorsChange = (_: SyntheticEvent<Element, Event>, value: User[]) => {
+    setSecondaryCoordinators(value);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -108,7 +115,7 @@ export function CourseAddComponent() {
       isPrimaryCoordinatorValid(primaryCoordinator);
 
     if (isFormValid) {
-      await dispatch(
+      const response = await dispatch(
         createCourse({
           name: courseName,
           description,
@@ -119,6 +126,17 @@ export function CourseAddComponent() {
           primary_coordinator_id: primaryCoordinator
         })
       );
+      const courseId = response?.payload?.data?.id;
+      if (courseId && secondaryCoordinators.length !== 0) {
+        secondaryCoordinators.forEach(async (user: User) => {
+          await dispatch(
+            createCoordinator({
+              user_id: user.id,
+              course_id: courseId
+            })
+          );
+        });
+      }
       await dispatch(fetchCourses());
       navigate('/courses');
     }
@@ -232,12 +250,34 @@ export function CourseAddComponent() {
               helperText={primaryCoordinatorHelperText}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrimaryCoordinator(e.target.value)}
             >
-              {users?.map((user: User) => (
-                <MenuItem key={user.id} value={user.id}>
-                  {user.name}
-                </MenuItem>
-              ))}
+              {users ? (
+                users?.map((user: User) => (
+                  <MenuItem key={user.id} value={user.id}>
+                    {user.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <div></div>
+              )}
             </TextField>
+          </div>
+          <div style={{ padding: '10px' }}>
+            <Autocomplete
+              multiple
+              id="secondaryCoordinators"
+              options={users ?? []}
+              getOptionLabel={(option) => option.name}
+              defaultValue={[]}
+              onChange={handleSecondaryCoordinatorsChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Secondary Coordinators"
+                  placeholder="Secondary Coordinators"
+                />
+              )}
+            />
           </div>
           <div style={{ padding: '10px' }}>
             <Button sx={{ width: '100%' }} variant="contained" type="submit">

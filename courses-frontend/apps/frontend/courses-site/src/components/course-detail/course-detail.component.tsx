@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../store/store';
 import SpinnerComponent from '../spinner/spinner.component';
 import { deleteCourse, fetchCourseById, fetchCourses, updateCourse } from '../../store/coursesReducer';
-import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { Course } from '../../interfaces/Course';
 import {
   CourseNameErrorMessage,
@@ -24,6 +24,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import './course-detail.component.styles.scss';
 import { User } from '../../interfaces/User';
 import { fetchUsers } from '../../store/usersReducer';
+import { Coordinator } from '../../interfaces/Coordinator';
+import { createCoordinator, deleteCoordinator } from '../../store/coordinatorReducer';
 
 export function CourseDetailComponent() {
   const { id } = useParams();
@@ -58,6 +60,9 @@ export function CourseDetailComponent() {
 
   const [localCourseDetails, setLocalCourseDetails] = useState<Course | null | undefined>(null);
 
+  const [initialSecondaryCoordinators, setInitialSecondaryCoordinators] = useState<User[] | undefined>([]);
+  const [secondaryCoordinators, setSecondaryCoordinators] = useState<User[] | undefined>([]);
+
   useEffect(() => {
     if (!usersState.users) dispatch(fetchUsers());
     if (!localCourseDetails && id) dispatch(fetchCourseById(id));
@@ -69,6 +74,14 @@ export function CourseDetailComponent() {
     setStartDate(dayjs(courseDetails?.start_date));
     setDurationInDays(String(courseDetails?.course_length_in_days));
     setPrimaryCoordinator(String(courseDetails?.primary_coordinator?.id ?? ''));
+    const coordinators: User[] | undefined = courseDetails?.coordinators?.map((item: Coordinator) => {
+      return {
+        id: item.user?.id,
+        name: item.user?.name
+      } as User;
+    });
+    setSecondaryCoordinators(coordinators);
+    setInitialSecondaryCoordinators(coordinators);
   }, [dispatch, id, courseDetails, localCourseDetails, usersState.users]);
 
   if (isLoading || usersState.isLoading) {
@@ -81,7 +94,11 @@ export function CourseDetailComponent() {
       await dispatch(fetchCourses());
       navigate('/courses');
     }
-  }
+  };
+
+  const handleSecondaryCoordinatorsChange = (_: SyntheticEvent<Element, Event>, value: User[]) => {
+    setSecondaryCoordinators(value);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,7 +146,7 @@ export function CourseDetailComponent() {
       isPrimaryCoordinatorValid(primaryCoordinator);
 
     if (isFormValid) {
-      await dispatch(
+      const response = await dispatch(
         updateCourse({
           id,
           name: courseName,
@@ -141,6 +158,40 @@ export function CourseDetailComponent() {
           primary_coordinator_id: primaryCoordinator
         })
       );
+
+      const oldCoordinators =
+        response?.payload?.data?.coordinators.map((coordinator: Coordinator) => coordinator.user_id) ?? [];
+      const newCoordinators = secondaryCoordinators?.map((user: User) => user.id) ?? [];
+      const toAddSecondaryCoordinatorIds = newCoordinators?.filter((item: string) => !oldCoordinators.includes(item));
+      const toRemoveSecondaryCoordinatorIds = oldCoordinators?.filter(
+        (item: string) => !newCoordinators.includes(item)
+      );
+
+      if (toAddSecondaryCoordinatorIds.length !== 0) {
+        toAddSecondaryCoordinatorIds.forEach(async (userId: string) => {
+          await dispatch(
+            createCoordinator({
+              user_id: userId,
+              course_id: id
+            })
+          );
+        });
+      }
+
+      if (toRemoveSecondaryCoordinatorIds.length !== 0) {
+        toRemoveSecondaryCoordinatorIds.forEach(async (userId: string) => {
+          const coordinatorId = response?.payload?.data?.coordinators?.filter(
+            (coordinator: Coordinator) => coordinator.user_id === userId
+          )[0]?.id;
+          await dispatch(
+            deleteCoordinator({
+              user_id: userId,
+              course_id: id,
+              id: coordinatorId
+            })
+          );
+        });
+      }
       await dispatch(fetchCourses());
       navigate('/courses');
     }
@@ -258,12 +309,35 @@ export function CourseDetailComponent() {
               helperText={primaryCoordinatorHelperText}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrimaryCoordinator(e.target.value)}
             >
-              {usersState.users?.map((user: User) => (
-                <MenuItem key={user.id} value={user.id}>
-                  {user.name}
-                </MenuItem>
-              ))}
+              {usersState.users ? (
+                usersState.users?.map((user: User) => (
+                  <MenuItem key={user.id} value={user.id}>
+                    {user.name}
+                  </MenuItem>
+                ))
+              ) : (
+                <div></div>
+              )}
             </TextField>
+          </div>
+          <div style={{ padding: '10px' }}>
+            <Autocomplete
+              multiple
+              id="secondaryCoordinators"
+              options={usersState.users ?? []}
+              getOptionLabel={(option) => option.name}
+              defaultValue={initialSecondaryCoordinators}
+              onChange={handleSecondaryCoordinatorsChange}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Secondary Coordinators"
+                  placeholder="Secondary Coordinators"
+                />
+              )}
+            />
           </div>
           <div style={{ padding: '10px' }}>
             <Button sx={{ width: '100%' }} variant="contained" type="submit">
