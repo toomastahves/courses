@@ -7,7 +7,7 @@ module.exports = {
     path: join(__dirname, '../../../dist/apps/frontend/courses-site'),
   },
   devServer: {
-    port: 4200,
+    port: 5000,
     allowedHosts: 'all',
     historyApiFallback: true
   },

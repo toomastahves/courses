@@ -12,6 +12,6 @@ export default defineConfig({
       },
       ciWebServerCommand: 'nx run courses-site:serve-static',
     }),
-    baseUrl: 'http://localhost:4200',
+    baseUrl: 'http://localhost:5000',
   },
 });
