@@ -33,7 +33,7 @@ export const ApiService = {
     }
   },
 
-  async deleteCourse(id: string | number) {
+  async deleteCourse(id: string) {
     try {
       return await client.delete(
         `${environment.NX_REST_API}/api/v1/courses/${id}`,

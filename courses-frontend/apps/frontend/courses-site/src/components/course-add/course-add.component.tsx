@@ -114,7 +114,7 @@ export function CourseAddComponent() {
           level: studyLevel,
           start_date: dayjs(startDate).format('YYYY-MM-DD'),
           course_length_in_days: Number(durationInDays),
-          primary_coordinator_id: Number(primaryCoordinator)
+          primary_coordinator_id: primaryCoordinator
         })
       );
       navigate('/courses');

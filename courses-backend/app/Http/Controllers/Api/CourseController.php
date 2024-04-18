@@ -75,7 +75,7 @@ class CourseController extends Controller
                 'level' => 'required|in:Bachelor,Master,Doctoral',
                 'start_date' => 'required|date|after:yesterday',
                 'course_length_in_days' => 'required|min:0|max:365',
-                'primary_coordinator_id' => 'required|numeric'
+                'primary_coordinator_id' => 'required|string'
             ]),
             'end_date' => $this->createEndDate($request)
         ]);
@@ -133,9 +133,9 @@ class CourseController extends Controller
                 'description' => 'nullable|string|max:2000',
                 'study_load' => 'sometimes|min:0|max:30',
                 'level' => 'sometimes|in:Bachelor,Master,Doctoral',
-                'start_date' => 'sometimes|date|after:yesterday',
+                'start_date' => 'sometimes|date',
                 'course_length_in_days' => 'sometimes|min:0|max:365',
-                'primary_coordinator_id' => 'required|numeric'
+                'primary_coordinator_id' => 'sometimes|string'
             ]),
             'end_date' => $this->createEndDate($request)
         ]);

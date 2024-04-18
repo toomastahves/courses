@@ -11,6 +11,9 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'name',
         'description',
@@ -36,4 +39,10 @@ class Course extends Model
     {
         return $this->hasMany(Coordinator::class);
     }
+
+    public static function booted() {
+        static::creating(function ($model) {
+            $model->id = \Str::uuid();
+        });
+    }    
 }

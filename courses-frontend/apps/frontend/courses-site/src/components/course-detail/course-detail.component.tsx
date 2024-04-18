@@ -76,9 +76,11 @@ export function CourseDetailComponent() {
   }
 
   const handleDelete = async () => {
-    await dispatch(deleteCourse(Number(id)));
-    await dispatch(fetchCourses());
-    navigate('/courses');
+    if (id) {
+      await dispatch(deleteCourse(id));
+      await dispatch(fetchCourses());
+      navigate('/courses');
+    }
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -136,7 +138,7 @@ export function CourseDetailComponent() {
           level: studyLevel,
           start_date: dayjs(startDate).format('YYYY-MM-DD'),
           course_length_in_days: Number(durationInDays),
-          primary_coordinator_id: Number(primaryCoordinator)
+          primary_coordinator_id: primaryCoordinator
         })
       );
       await dispatch(fetchCourses());

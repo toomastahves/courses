@@ -10,6 +10,9 @@ class Coordinator extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'user_id',
         'course_id'
@@ -28,5 +31,11 @@ class Coordinator extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public static function booted() {
+        static::creating(function ($model) {
+            $model->id = \Str::uuid();
+        });
     }
 }

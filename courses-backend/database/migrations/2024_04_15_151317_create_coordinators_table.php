@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coordinators', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
 
-            $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unique(['course_id', 'user_id']);
 
             $table->timestamps();
         });

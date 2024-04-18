@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
 
-            $table->uuid('course_id')->unique()->default(DB::raw('(UUID())'));
             $table->string('name', 200);
             $table->string('description', 2000)->nullable();
             $table->integer('study_load');
@@ -23,7 +22,7 @@ return new class extends Migration
             $table->integer('course_length_in_days');
             $table->date('end_date');
 
-            $table->foreignId('primary_coordinator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('primary_coordinator_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });
