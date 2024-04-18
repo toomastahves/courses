@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "serve": "nx serve courses-site"
+    "serve": "nx serve courses-site --skipNxCache"
   },
   "private": true,
   "devDependencies": {
