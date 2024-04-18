@@ -3,8 +3,8 @@ import { ApiService } from '../services/courses-api.service';
 import { Course } from '../interfaces/Course';
 
 export interface CourseState {
-  courses: Course[] | null | undefined;
-  courseDetails: Course | null | undefined;
+  courses: Course[] | null;
+  courseDetails: Course | null;
   isLoading: boolean;
 }
 
@@ -67,8 +67,6 @@ const coursesSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(createCourse.fulfilled, (state, action) => {
-        if (!state.courses) state.courses = [action.payload.data];
-        else state.courses.push(action.payload.data);
         state.isLoading = false;
       })
       .addCase(fetchCourseById.pending, (state, action) => {

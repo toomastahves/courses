@@ -1,7 +1,7 @@
 import { Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
-import { createCourse } from '../../store/coursesReducer';
+import { useEffect, useState } from 'react';
+import { createCourse, fetchCourses } from '../../store/coursesReducer';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { fetchUsers } from '../../store/usersReducer';
@@ -54,11 +54,13 @@ export function CourseAddComponent() {
   const [primaryCoordinatorError, setPrimaryCoordinatorError] = useState(false);
   const [primaryCoordinatorHelperText, setPrimaryCoordinatorHelperText] = useState('');
 
+  useEffect(() => {
+    if (!users) dispatch(fetchUsers());
+  }, [dispatch, users]);
+
   if (isLoading || isCoursesLoading) {
     return <SpinnerComponent open={true} />;
   }
-
-  if (!users) dispatch(fetchUsers());
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,6 +119,7 @@ export function CourseAddComponent() {
           primary_coordinator_id: primaryCoordinator
         })
       );
+      await dispatch(fetchCourses());
       navigate('/courses');
     }
   };
@@ -193,6 +196,7 @@ export function CourseAddComponent() {
           <div style={{ padding: '10px' }}>
             <DatePicker
               className="datepicker"
+              label="Start Date"
               value={startDate}
               defaultValue={dayjs()}
               onChange={(val) => setStartDate(val)}

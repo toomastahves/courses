@@ -221,6 +221,7 @@ export function CourseDetailComponent() {
           <div style={{ padding: '10px' }}>
             <DatePicker
               className="datepicker"
+              label="Start Date"
               value={startDate}
               defaultValue={dayjs()}
               onChange={(val) => setStartDate(val)}
