@@ -57,7 +57,11 @@ export const deleteCourse = createAsyncThunk(
 const coursesSlice = createSlice({
   name: 'courses',
   initialState,
-  reducers: {},
+  reducers: {
+    clearCourseDetails(state) {
+      state.courseDetails = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createCourse.pending, (state, action) => {
@@ -110,4 +114,5 @@ const coursesSlice = createSlice({
   }
 });
 
+export const { clearCourseDetails } = coursesSlice.actions;
 export default coursesSlice.reducer;

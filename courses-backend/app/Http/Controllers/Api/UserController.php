@@ -9,7 +9,15 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/v1/users/",
+     *     summary="Get list of users",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK"
+     *     )
+     * )
      */
     public function index()
     {

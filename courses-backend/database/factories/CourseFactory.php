@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\StudyLevel;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,8 +22,8 @@ class CourseFactory extends Factory
             'name' => fake()->unique()->sentence(5, true),
             'description' => fake()->paragraph(2, true),
             'study_load' => fake()->numberBetween(0, 30),
-            'level' => fake()->randomElement(['Bachelor', 'Master', 'Doctoral']),
-            'start_date' => fake()->dateTimeBetween('-1 year', 'now'),
+            'level' => fake()->randomElement(StudyLevel::cases()),
+            'start_date' => fake()->dateTimeBetween('now', '+1 year'),
             'course_length_in_days' => fake()->numberBetween(0, 365),
             'end_date' => function (array $attributes) {
                 $endDate = Carbon::createFromTimeStamp($attributes['start_date']->getTimestamp());

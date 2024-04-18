@@ -5,8 +5,105 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/v1/courses/{courseId}/coordinators": {
+            "post": {
+                "tags": [
+                    "Coordinators"
+                ],
+                "summary": "Creates a coordinator",
+                "operationId": "a486f3edc46c9be52e8324a8949c44d6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "int": {
+                                "summary": "An int value.",
+                                "value": "1"
+                            }
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "user_id": "123"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/courses/{courseId}/coordinators/{coordinatorId}": {
+            "delete": {
+                "tags": [
+                    "Coordinators"
+                ],
+                "summary": "Deletes a coordinator",
+                "operationId": "274542d40d033d738fc58be37784da25",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "description": "Course ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "int": {
+                                "summary": "An int value.",
+                                "value": "1"
+                            }
+                        }
+                    },
+                    {
+                        "name": "coordinatorId",
+                        "in": "path",
+                        "description": "Coordinator ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "int": {
+                                "summary": "An int value.",
+                                "value": "1"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/api/v1/courses/": {
             "get": {
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Get list of courses",
                 "operationId": "eec7cb847abd1a41f852d8cfeadca950",
                 "responses": {
@@ -18,6 +115,9 @@
         },
         "/api/v1/courses/{id}": {
             "get": {
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Get course by ID",
                 "operationId": "277d770bee72d413e9823834918243bc",
                 "parameters": [
@@ -44,6 +144,9 @@
                 }
             },
             "put": {
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Updates a course",
                 "operationId": "899d3ac3e17d165644765e85d26f158a",
                 "parameters": [
@@ -70,6 +173,9 @@
                 }
             },
             "post": {
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Creates a course",
                 "operationId": "11a5024b49f5496bb5e288598b83fdcd",
                 "parameters": [
@@ -125,6 +231,9 @@
                 }
             },
             "delete": {
+                "tags": [
+                    "Courses"
+                ],
                 "summary": "Deletes a course",
                 "operationId": "16fb9797f8263bfd2a356c9208d7061f",
                 "parameters": [
@@ -146,6 +255,20 @@
                 ],
                 "responses": {
                     "204": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of users",
+                "operationId": "7f2cb611ec4e44324b18bf3309455b71",
+                "responses": {
+                    "200": {
                         "description": "OK"
                     }
                 }

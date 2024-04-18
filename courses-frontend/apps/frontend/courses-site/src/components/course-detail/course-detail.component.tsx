@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../store/store';
 import SpinnerComponent from '../spinner/spinner.component';
-import { deleteCourse, fetchCourseById, fetchCourses, updateCourse } from '../../store/coursesReducer';
+import { clearCourseDetails, deleteCourse, fetchCourseById, fetchCourses, updateCourse } from '../../store/coursesReducer';
 import { Autocomplete, Box, Button, MenuItem, TextField, Typography } from '@mui/material';
 import { Course } from '../../interfaces/Course';
 import {
@@ -193,6 +193,7 @@ export function CourseDetailComponent() {
         });
       }
       await dispatch(fetchCourses());
+      dispatch(clearCourseDetails());
       navigate('/courses');
     }
   };
