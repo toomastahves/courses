@@ -16,6 +16,9 @@ RUN useradd -ms /bin/bash laravel
 # Give laravel user permissions and copy files over
 COPY --chown=laravel:laravel . .
 
+# Replace .env file with Docker version
+COPY .env.docker .env
+
 # Install composer dependencies inside container
 RUN composer install
 
