@@ -1,17 +1,23 @@
-# Readme
+# Step-by-step guide to running the application.
 
-This project contains two applications in separate folders: courses-backend (Laravel, PHP) and courses-frontend (React, TypeScript).
-
-Applications run in Docker containers. Setup using Docker Compose:
+1.	Begin by cloning the repository to your local machine:
 ```
+git clone git@github.com:toomastahves/courses.git
+```
+
+2.	Navigate to cloned repository and launch application containers using Docker Compose:
+```
+cd courses
 docker compose up -d
 ```
 
-After applications have started, then run database migrations and generate seed data inside backend container:
+3.	Once applications are running, execute database migrations and seed data by entering the backend container: 
 ```
-docker exec courses-backend /bin/bash -c  "php artisan migrate --seed"
+docker exec courses-backend /bin/bash -c "php artisan migrate --seed"
 ```
 
-Visit frontend on: http://localhost:5000/
-
-Visit API on: http://localhost:5001/api/documentation
+4.	The applications should now be available on following URLs:
+```
+Frontend: http://localhost:5000/
+Backend: http://localhost:5001/api/documentation
+```

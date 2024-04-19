@@ -1,13 +1,23 @@
-# Readme
+# Alternative Front-End Setup Guide (without Docker)
 
-Install dependencies:
+This alternative method is useful if you encounter issues with Docker containers. Tested it with Node 20 and NPM 10 installed globally on a system:
+
+1.	Navigate to the frontend directory:
+```
+cd /courses/courses-frontend
+```
+
+2.	Install necessary dependencies:
 ```
 npm install
 ```
 
-Run application:
+3.	Start local development server to serve application:
 ```
 npm run serve
 ```
 
-Visit site on: http://localhost:5000/
+4.	Open web browser and visit application:
+```
+http://localhost:5000/
+```
