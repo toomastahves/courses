@@ -3,14 +3,20 @@ FROM node:20-alpine
 # Set working directory for running commands
 WORKDIR /home/node/app
 
-# Give node user permissions and copy code files over
-COPY --chown=node:node . .
+# Set working directory for running commands
+RUN chown -R node:node /home/node/app
+
+# Copy package file into container
+COPY package.json ./
+
+# Switching user from root to node
+USER node
 
 # Installing deps
 RUN npm install
 
-# Switching user from root to node
-USER node
+# Give node user permissions and copy code files over
+COPY --chown=node:node . .
 
 # Expose port where application runs
 EXPOSE 5000

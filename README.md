@@ -1,6 +1,6 @@
 # Readme
 
-This project contains two applications in separate folders: courses-backend (Laravel, PHP) and courses-frontend (React, TypeScript)
+This project contains two applications in separate folders: courses-backend (Laravel, PHP) and courses-frontend (React, TypeScript).
 
 Applications run in Docker containers. Setup using Docker Compose:
 ```
@@ -12,6 +12,6 @@ After applications have started, then run database migrations and generate seed 
 docker exec courses-backend /bin/bash -c  "php artisan migrate --seed"
 ```
 
-Frontend site is available at: http://localhost:5000/
+Visit frontend on: http://localhost:5000/
 
-Backend API is available at: http://localhost:5001/api/documentation/
+Visit API on: http://localhost:5001/api/documentation

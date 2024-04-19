@@ -64,5 +64,14 @@
         "linter": "eslint"
       }
     }
+  },
+  "tasksRunnerOptions": {
+    "customRunner": {
+      "options": {
+        "parallel": 4,
+        "skipNxCache": true,
+        "useDaemonProcess": false
+      }
+    }
   }
 }
